@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SignUpUserDto } from './dtos/sign-up-user.dto';
@@ -6,6 +10,7 @@ import { User } from './user.entity';
 
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
+import { SignInUserDto } from './dtos/sign-in-user.dto';
 
 const scrypt = promisify(_scrypt);
 
@@ -40,5 +45,26 @@ export class UsersService {
     const user = this.usersRepository.create(signUpUserDto);
     const result = await this.usersRepository.save(user);
     return result;
+  }
+
+  async signIn(signInUserDto: SignInUserDto) {
+    const { email, password } = signInUserDto;
+    const users = await this.usersRepository.find({ email });
+
+    if (!users.length) {
+      throw new NotFoundException('user not found');
+    }
+
+    const user = users[0];
+
+    const [salt, storedHash] = user.password.split('.');
+
+    const hash = (await scrypt(password, salt, 32)) as Buffer;
+
+    if (storedHash !== hash.toString('hex')) {
+      throw new BadRequestException('wrong email or password');
+    }
+
+    return user;
   }
 }

@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guards';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { SignInUserDto } from './dtos/sign-in-user.dto';
 import { SignUpUserDto } from './dtos/sign-up-user.dto';
 import { UserDto } from './dtos/user.dto';
 import { User } from './user.entity';
@@ -30,8 +31,14 @@ export class UsersController {
     @Session() session: any,
   ): Promise<User> {
     const user = await this.usersService.singUp(body);
-    console.log(session);
     session.userId = user.id;
+    return user;
+  }
+
+  @Post('signin')
+  async signin(@Body() body: SignInUserDto, @Session() session: any) {
+    const user = await this.usersService.signIn(body);
+    session.userID = user.id;
     return user;
   }
 
