@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guards';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { CurrentUser } from './decorators/current-user.decorator';
 import { SignInUserDto } from './dtos/sign-in-user.dto';
 import { SignUpUserDto } from './dtos/sign-up-user.dto';
 import { UserDto } from './dtos/user.dto';
@@ -23,6 +24,13 @@ export class UsersController {
   @UseGuards(AuthGuard)
   hello() {
     return 'hello';
+  }
+
+  @Get('whoami')
+  @UseGuards(AuthGuard)
+  whoami(@CurrentUser() currentUser: User) {
+    console.log(currentUser);
+    return currentUser;
   }
 
   @Post('signup')
