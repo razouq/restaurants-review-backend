@@ -8,17 +8,17 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guards';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { SignInUserDto } from './dtos/sign-in-user.dto';
 import { SignUpUserDto } from './dtos/sign-up-user.dto';
 import { UserDto } from './dtos/user.dto';
 import { User } from './user.entity';
-import { UsersService } from './users.service';
 
 @Controller('auth')
 @Serialize(UserDto)
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private authService: AuthService) {}
 
   @Get()
   @UseGuards(AuthGuard)
@@ -38,15 +38,15 @@ export class UsersController {
     @Body() body: SignUpUserDto,
     @Session() session: any,
   ): Promise<User> {
-    const user = await this.usersService.singUp(body);
+    const user = await this.authService.singUp(body);
     session.userId = user.id;
     return user;
   }
 
   @Post('signin')
   async signin(@Body() body: SignInUserDto, @Session() session: any) {
-    const user = await this.usersService.signIn(body);
-    session.userID = user.id;
+    const user = await this.authService.signIn(body);
+    session.userId = user.id;
     return user;
   }
 
