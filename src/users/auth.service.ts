@@ -24,14 +24,10 @@ export class AuthService {
       throw new BadRequestException('email is used');
     }
 
-    // Hash the users password
-    // Generate a salt
     const salt = randomBytes(8).toString('hex');
 
-    // Hash the salt and the password together
     const hash = (await scrypt(password, salt, 32)) as Buffer;
 
-    // Join the hashed result and the salt together
     const hashedPassword = salt + '.' + hash.toString('hex');
 
     signUpUserDto.password = hashedPassword;
