@@ -25,8 +25,11 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Req() req: Request) {
-    return this.authService.login(req.user);
+  async login(@Req() req: Request, @Res() res: Response) {
+    const jwt = await this.authService.login(req.user);
+    console.log(jwt);
+    res.cookie('jwt', jwt, { httpOnly: true });
+    return res.json({ message: 'success' });
   }
 
   @UseGuards(JwtAuthGuard)
