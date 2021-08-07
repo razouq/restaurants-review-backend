@@ -8,7 +8,6 @@ import { Request } from 'express';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
           return request?.cookies?.jwt;
@@ -20,7 +19,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    const { userId, email } = payload;
-    return { userId, email };
+    console.log('validate');
+    const { userId, email, role } = payload;
+    console.log('payload', payload);
+    return { userId, email, role };
   }
 }
