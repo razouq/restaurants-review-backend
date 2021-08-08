@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import { User } from 'src/users/user.entity';
+import { CurrentUser } from '../decorators/current-user.decorator';
+import { User } from '../users/user.entity';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dtos/RegisterUser.dto';
 import { Role } from './enums/role.enum';
@@ -22,6 +22,7 @@ import { Roles } from './roles.decorator';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @Post('register')
   async register(@Body() registerUserDto: RegisterUserDto) {
     const { email, password } = registerUserDto;
@@ -33,7 +34,6 @@ export class AuthController {
   @Post('login')
   async login(@Req() req: Request, @Res() res: Response) {
     const jwt = await this.authService.login(req.user);
-    console.log(jwt);
     res.cookie('jwt', jwt, { httpOnly: true });
     return res.json({ message: 'success' });
   }
