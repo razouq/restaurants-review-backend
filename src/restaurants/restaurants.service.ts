@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from 'src/users/user.entity';
+import { User } from '../users/user.schema';
 import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
-import { Restaurant } from './restaurant.entity';
-import { RestaurantDocument } from './restaurant.schema';
+import { Restaurant, RestaurantDocument } from './restaurant.schema';
 
 @Injectable()
 export class RestaurantsService {

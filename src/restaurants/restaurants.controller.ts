@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import { User } from 'src/users/user.entity';
+import { CurrentUser } from '../decorators/current-user.decorator';
+import { User } from '../users/user.schema';
 import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
 import { RestaurantsService } from './restaurants.service';
 

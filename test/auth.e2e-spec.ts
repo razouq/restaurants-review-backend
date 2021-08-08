@@ -3,11 +3,12 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import * as cookieParser from 'cookie-parser';
-import { Repository } from 'typeorm';
-import { User } from 'src/users/user.entity';
+import { User, UserDocument } from '../src/users/user.schema';
+import { Model } from 'mongoose';
+import { getModelToken } from '@nestjs/mongoose';
 
 describe('Authentication System', () => {
-  let usersRepository: Repository<User>;
+  let userModel: Model<UserDocument>;
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -17,7 +18,9 @@ describe('Authentication System', () => {
     app.useGlobalPipes(new ValidationPipe());
     app.use(cookieParser());
     await app.init();
-    usersRepository = moduleFixture.get('UserRepository');
+    userModel = moduleFixture.get<Model<UserDocument>>(
+      getModelToken(User.name),
+    );
   });
   let app: INestApplication;
   describe('Register', () => {
@@ -29,14 +32,14 @@ describe('Authentication System', () => {
         .send({ email: email1, password })
         .expect(201)
         .then((res) => {
-          const { id, email, role } = res.body;
-          expect(id).toBeDefined();
+          const { _id, email, role } = res.body;
+          expect(_id).toBeDefined();
           expect(email).toEqual(email1);
           expect(role).toEqual('user');
         });
     });
 
-    it('I am NOT allowed to register without email', async () => {
+    it('I am NOT allowed to register using only the password', async () => {
       const password = 'razouq';
       return request(app.getHttpServer())
         .post('/auth/register')
@@ -80,10 +83,11 @@ describe('Authentication System', () => {
       const password = 'razouq';
 
       // Create a FAKE user with email1
-      await usersRepository.save({
+      const fakeUser = new userModel({
         email: email1,
         password,
       });
+      await fakeUser.save();
 
       const res = await request(app.getHttpServer())
         .post('/auth/register')
@@ -130,7 +134,7 @@ describe('Authentication System', () => {
   });
 
   afterEach(async () => {
-    await usersRepository.query(`DELETE FROM users;`);
+    await userModel.deleteMany({});
   });
 
   afterAll(async () => {

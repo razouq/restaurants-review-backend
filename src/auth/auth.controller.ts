@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
+import { User } from '../users/user.schema';
 import { CurrentUser } from '../decorators/current-user.decorator';
-import { User } from '../users/user.entity';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dtos/RegisterUser.dto';
 import { Role } from './enums/role.enum';
