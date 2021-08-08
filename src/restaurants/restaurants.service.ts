@@ -1,33 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { User } from 'src/users/user.entity';
-import { Repository } from 'typeorm';
 import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
 import { Restaurant } from './restaurant.entity';
+import { RestaurantDocument } from './restaurant.schema';
 
 @Injectable()
 export class RestaurantsService {
   constructor(
-    @InjectRepository(Restaurant)
-    private restaurantsRepository: Repository<Restaurant>,
+    @InjectModel(Restaurant.name)
+    private restaurantModel: Model<RestaurantDocument>,
   ) {}
 
   async create(createRestaurantDto: CreateRestaurantDto, currentUser: User) {
-    const restaurant = this.restaurantsRepository.create(createRestaurantDto);
-    restaurant.user = currentUser;
-    return await this.restaurantsRepository.save(restaurant);
+    const restaurant = new this.restaurantModel(createRestaurantDto);
+    // restaurant.user = currentUser;
+    return await restaurant.save();
   }
 
   async list() {
-    return this.restaurantsRepository
-      .createQueryBuilder('restaurant')
-      .select([
-        'restaurant.id',
-        'restaurant.title',
-        'restaurant.description',
-        'user.id',
-      ])
-      .leftJoin('restaurant.user', 'user')
-      .getMany();
+    return await this.restaurantModel.find({});
   }
 }

@@ -14,7 +14,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
-    const users = await this.usersService.findOneByEmail(email);
+    const users = await this.usersService.findUsersByEmail(email);
 
     if (!users.length) {
       return null;
@@ -41,7 +41,7 @@ export class AuthService {
   }
 
   async register(email: string, password: string) {
-    const users = await this.usersService.findOneByEmail(email);
+    const users = await this.usersService.findUsersByEmail(email);
     if (users.length) {
       throw new BadRequestException('email in use');
     }

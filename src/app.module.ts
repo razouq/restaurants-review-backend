@@ -11,6 +11,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { Restaurant } from './restaurants/restaurant.entity';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -33,6 +34,9 @@ import { Restaurant } from './restaurants/restaurant.entity';
         };
       },
     }),
+    MongooseModule.forRoot(
+      `mongodb+srv://root:root@feedback.iliwi.mongodb.net/restaurants-nest?retryWrites=true&w=majority`,
+    ),
     UsersModule,
     AuthModule,
     RestaurantsModule,
