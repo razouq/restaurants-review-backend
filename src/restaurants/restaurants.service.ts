@@ -13,10 +13,21 @@ export class RestaurantsService {
   ) {}
 
   async create(createRestaurantDto: CreateRestaurantDto, currentUser: User) {
-    console.log(currentUser);
     const restaurant = this.restaurantsRepository.create(createRestaurantDto);
-    console.log(currentUser);
     restaurant.user = currentUser;
     return await this.restaurantsRepository.save(restaurant);
+  }
+
+  async list() {
+    return this.restaurantsRepository
+      .createQueryBuilder('restaurant')
+      .select([
+        'restaurant.id',
+        'restaurant.title',
+        'restaurant.description',
+        'user.id',
+      ])
+      .leftJoin('restaurant.user', 'user')
+      .getMany();
   }
 }

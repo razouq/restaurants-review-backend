@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CurrentUser } from 'src/decorators/current-user.decorator';
 import { User } from 'src/users/user.entity';
 import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
@@ -17,5 +17,10 @@ export class RestaurantsController {
       createRestaurantDto,
       currentUser,
     );
+  }
+
+  @Get()
+  async list() {
+    return this.restaurantsService.list();
   }
 }
