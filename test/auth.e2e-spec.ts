@@ -15,6 +15,7 @@ describe('Authentication System', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.setGlobalPrefix('/api');
     app.useGlobalPipes(new ValidationPipe());
     app.use(cookieParser());
     await app.init();
@@ -28,7 +29,7 @@ describe('Authentication System', () => {
       const email1 = 'razouq@gmail.com';
       const password = 'razouq';
       return request(app.getHttpServer())
-        .post('/auth/register')
+        .post('/api/auth/register')
         .send({ email: email1, password })
         .expect(201)
         .then((res) => {
@@ -42,7 +43,7 @@ describe('Authentication System', () => {
     it('I am NOT allowed to register using only the password', async () => {
       const password = 'razouq';
       return request(app.getHttpServer())
-        .post('/auth/register')
+        .post('/api/auth/register')
         .send({ password })
         .expect(400);
     });
@@ -50,7 +51,7 @@ describe('Authentication System', () => {
     it('I am NOT allowed register without password', async () => {
       const email1 = 'razouq@gmail.com';
       return request(app.getHttpServer())
-        .post('/auth/register')
+        .post('/api/auth/register')
         .send({ email: email1 })
         .expect(400);
     });
@@ -60,7 +61,7 @@ describe('Authentication System', () => {
       const email1 = 'razouq@gmail .com';
       const password = 'razouq';
       return request(app.getHttpServer())
-        .post('/auth/register')
+        .post('/api/auth/register')
         .send({ email: email1, password })
         .expect(400);
     });
@@ -70,7 +71,7 @@ describe('Authentication System', () => {
       const email1 = 'razouq@gmail .com';
       const password = 'razouq';
       const res = await request(app.getHttpServer())
-        .post('/auth/register')
+        .post('/api/auth/register')
         .send({ email: email1, password })
         .expect(400);
 
@@ -90,7 +91,7 @@ describe('Authentication System', () => {
       await fakeUser.save();
 
       const res = await request(app.getHttpServer())
-        .post('/auth/register')
+        .post('/api/auth/register')
         .send({ email: email1, password })
         .expect(400);
 
@@ -105,11 +106,11 @@ describe('Authentication System', () => {
       const password = 'razouq';
 
       await request(app.getHttpServer())
-        .post('/auth/register')
+        .post('/api/auth/register')
         .send({ email: email1, password });
 
       const res = await request(app.getHttpServer())
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({ email: email1, password });
 
       const { message } = res.body;
@@ -123,11 +124,11 @@ describe('Authentication System', () => {
       const password = 'razouq';
 
       await request(app.getHttpServer())
-        .post('/auth/register')
+        .post('/api/auth/register')
         .send({ email: email1, password });
 
       await request(app.getHttpServer())
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({ email: email1, password: 'not razouq' })
         .expect(401);
     });
