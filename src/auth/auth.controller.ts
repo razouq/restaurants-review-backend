@@ -35,7 +35,8 @@ export class AuthController {
   async login(@Req() req: Request, @Res() res: Response) {
     const jwt = await this.authService.login(req.user);
     res.cookie('jwt', jwt, { httpOnly: true });
-    return res.json({ message: 'success' });
+    const { user } = req;
+    return res.json(user);
   }
 
   @UseGuards(JwtAuthGuard)

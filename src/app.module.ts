@@ -6,7 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { MongooseModule } from '@nestjs/mongoose';
 
