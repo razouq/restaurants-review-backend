@@ -113,10 +113,10 @@ describe('Authentication System', () => {
         .post('/api/auth/login')
         .send({ email: email1, password });
 
-      const { message } = res.body;
+      const { email } = res.body;
       console.log(res.body);
 
-      expect(message).toEqual('success');
+      expect(email).toEqual(email1);
     });
 
     it('I am NOT allowed to login if I do NOT have the right password', async () => {
