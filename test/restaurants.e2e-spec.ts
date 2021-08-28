@@ -26,8 +26,50 @@ describe('Restaurants System', () => {
   let app: INestApplication;
 
   describe('Create Restaurant', () => {
-    it('I am allowed to create a restaurant if I have owner role', () => {
-      console.log('test');
+    it('I am allowed to create a restaurant if I have owner role', async () => {
+      const email = 'razouq@gmail.com';
+      const password = 'razouq';
+
+      const fakeUser = new userModel({
+        email,
+        password,
+        role: 'owner',
+      });
+      await fakeUser.save();
+
+      await request(app.getHttpServer())
+        .post('/api/auth/login')
+        .send({ email, password });
+
+      const restaurantBody = {
+        title: 'title',
+        description: 'description',
+      };
+      request(app.getHttpServer()).post('/api/auth/login').send(restaurantBody);
+      expect(201);
+    });
+
+    it('I am NOT allowed to create a restaurant if I do NOT have owner role', async () => {
+      const email = 'razouq@gmail.com';
+      const password = 'razouq';
+
+      const fakeUser = new userModel({
+        email,
+        password,
+        role: 'user',
+      });
+      await fakeUser.save();
+
+      await request(app.getHttpServer())
+        .post('/api/auth/login')
+        .send({ email, password });
+
+      const restaurantBody = {
+        title: 'title',
+        description: 'description',
+      };
+      request(app.getHttpServer()).post('/api/auth/login').send(restaurantBody);
+      expect(400);
     });
   });
 
