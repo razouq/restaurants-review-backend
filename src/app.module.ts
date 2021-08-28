@@ -5,7 +5,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ConfigModule } from '@nestjs/config';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -17,7 +17,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
     MongooseModule.forRoot(
-      `mongodb+srv://root:root@feedback.iliwi.mongodb.net/restaurants-nest?retryWrites=true&w=majority`,
+      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@feedback.iliwi.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
     ),
     UsersModule,
     AuthModule,

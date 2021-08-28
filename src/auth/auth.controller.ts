@@ -14,9 +14,9 @@ import { CurrentUser } from '../decorators/current-user.decorator';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dtos/RegisterUser.dto';
 import { Role } from './enums/role.enum';
-import { JwtAuthGuard } from './jwt-auth.guard';
-import { Public } from './public.decorator';
-import { Roles } from './roles.decorator';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { Public } from '../decorators/public.decorator';
+import { Roles } from '../decorators/roles.decorator';
 
 @Controller('auth')
 export class AuthController {

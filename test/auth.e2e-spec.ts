@@ -114,7 +114,6 @@ describe('Authentication System', () => {
         .send({ email: email1, password });
 
       const { email } = res.body;
-      console.log(res.body);
 
       expect(email).toEqual(email1);
     });

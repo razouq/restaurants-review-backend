@@ -1,4 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Role } from 'src/auth/enums/role.enum';
+import { Roles } from 'src/decorators/roles.decorator';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { User } from '../users/user.schema';
 import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
@@ -8,6 +10,7 @@ import { RestaurantsService } from './restaurants.service';
 export class RestaurantsController {
   constructor(private restaurantsService: RestaurantsService) {}
 
+  @Roles(Role.Admin)
   @Post()
   async create(
     @Body() createRestaurantDto: CreateRestaurantDto,
