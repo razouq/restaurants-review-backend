@@ -36,11 +36,11 @@ export class AuthController {
     const jwt = await this.authService.login(req.user);
     res.cookie('jwt', jwt, { httpOnly: true });
     const { user } = req;
-    return res.json(user);
+    return res.status(200).json(user);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('profile')
+  @Get('me')
   getProfile(@CurrentUser() currentUser: User) {
     return currentUser;
   }
