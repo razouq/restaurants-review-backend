@@ -40,6 +40,16 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('logout')
+  logout(@Req() req: Request, @Res() res: Response) {
+    req.logOut();
+    res.clearCookie('jwt');
+    return res.status(200).json({
+      success: true,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('me')
   getProfile(@CurrentUser() currentUser: User) {
     return currentUser;
