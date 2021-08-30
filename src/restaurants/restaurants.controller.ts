@@ -11,7 +11,7 @@ import { Public } from 'src/decorators/public.decorator';
 export class RestaurantsController {
   constructor(private restaurantsService: RestaurantsService) {}
 
-  @Roles(Role.Admin)
+  @Public()
   @Post()
   async create(
     @Body() createRestaurantDto: CreateRestaurantDto,
