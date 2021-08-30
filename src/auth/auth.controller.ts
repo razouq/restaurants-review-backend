@@ -49,10 +49,11 @@ export class AuthController {
     });
   }
 
+  @Public()
   @UseGuards(JwtAuthGuard)
   @Get('me')
   getProfile(@CurrentUser() currentUser: User) {
-    return currentUser;
+    return currentUser || false;
   }
 
   // admin route
