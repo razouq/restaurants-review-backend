@@ -5,6 +5,7 @@ import { CurrentUser } from '../decorators/current-user.decorator';
 import { User } from '../users/user.schema';
 import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
 import { RestaurantsService } from './restaurants.service';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('restaurants')
 export class RestaurantsController {
@@ -22,6 +23,7 @@ export class RestaurantsController {
     );
   }
 
+  @Public()
   @Get()
   async list() {
     return this.restaurantsService.list();
