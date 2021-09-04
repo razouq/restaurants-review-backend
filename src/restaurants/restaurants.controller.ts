@@ -1,6 +1,4 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { Role } from '../auth/enums/role.enum';
-import { Roles } from '../decorators/roles.decorator';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { User } from '../users/user.schema';
 import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
