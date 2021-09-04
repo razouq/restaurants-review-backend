@@ -3,9 +3,9 @@ import { CurrentUser } from '../decorators/current-user.decorator';
 import { User } from '../users/user.schema';
 import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
 import { RestaurantsService } from './restaurants.service';
-import { Public } from 'src/decorators/public.decorator';
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from 'src/auth/enums/role.enum';
+import { Public } from '../decorators/public.decorator';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../auth/enums/role.enum';
 
 @Controller('restaurants')
 export class RestaurantsController {
