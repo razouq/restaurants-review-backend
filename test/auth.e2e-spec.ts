@@ -133,6 +133,40 @@ describe('Authentication System', () => {
     });
   });
 
+  describe('Me', () => {
+    it('I am allowed to get current user if I am authenticated', async () => {
+      const email1 = 'razouq@gmail.com';
+      const password = 'razouq';
+
+      const server = app.getHttpServer();
+
+      await request(server)
+        .post('/api/auth/register')
+        .send({ email: email1, password })
+        .expect(201);
+
+      const res1 = await request(server)
+        .post('/api/auth/login')
+        .send({ email: email1, password })
+        .expect(200);
+
+      const cookies = res1.headers['set-cookie'];
+
+      const res = await request(server)
+        .get('/api/auth/me')
+        .set('Cookie', [cookies])
+        .expect(200);
+
+      const { email } = res.body;
+
+      expect(email).toEqual(email1);
+    });
+
+    it('I am NOT allowed to get current user if I am authenticated', async () => {
+      await request(app.getHttpServer()).get('/api/auth/me').expect(401);
+    });
+  });
+
   afterEach(async () => {
     await userModel.deleteMany({});
   });
