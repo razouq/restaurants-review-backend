@@ -24,7 +24,7 @@ export class FilesController {
 
     const filesIds = [];
     const uploadImage = () => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         files.forEach(async (file) => {
           cloudinary.uploader
             .upload_stream({ resource_type: 'image' }, cloudinaryDone)
